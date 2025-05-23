@@ -12,7 +12,7 @@
   </head>
   <body>
     <div id="admin-panel" class="admin-container">
-      <h1>➕ Add a New Job - Step 1</h1>
+      <h1>➕ Add a New Job</h1>
 
       <form id="jobForm" class="job-form">
         <div class="form-group">
@@ -35,8 +35,42 @@
           <input type="text" id="skills" required />
         </div>
 
-        <!-- Instead of submit, we use a button for next step -->
-        <button type="button" id="nextBtn" class="btn-primary">Next ➡️</button>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="salary">Salary Range</label>
+          <input type="text" id="salary" />
+        </div>
+
+        <div class="form-group">
+          <label for="employment">Employment Type</label>
+          <input type="text" id="employment" />
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Experience Level</label>
+          <input type="text" id="experience" />
+        </div>
+
+        <div class="form-group">
+          <label for="requirements">Requirements</label>
+          <textarea id="requirements" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="benefits">Benefits</label>
+          <textarea id="benefits" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="deadline">Application Deadline</label>
+          <input type="date" id="deadline" />
+        </div>
+
+        <button type="submit" class="btn-primary">Submit Job ✅</button>
       </form>
 
       <a class="back-link" href="index.html">← Back to Job Board</a>
@@ -44,11 +78,12 @@
     </div>
 
     <script>
-      const nextBtn = document.getElementById("nextBtn");
+      const jobForm = document.getElementById("jobForm");
       const message = document.getElementById("message");
 
-      nextBtn.addEventListener("click", () => {
-        // Collect data
+      jobForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
         const job = {
           title: document.getElementById("title").value.trim(),
           company: document.getElementById("company").value.trim(),
@@ -58,6 +93,13 @@
             .value.split(",")
             .map((s) => s.trim())
             .filter((s) => s.length > 0),
+          description: document.getElementById("description").value.trim(),
+          salary_range: document.getElementById("salary").value.trim(),
+          employment_type: document.getElementById("employment").value.trim(),
+          experience_level: document.getElementById("experience").value.trim(),
+          requirements: document.getElementById("requirements").value.trim(),
+          benefits: document.getElementById("benefits").value.trim(),
+          application_deadline: document.getElementById("deadline").value,
         };
 
         // Basic validation
@@ -72,11 +114,58 @@
           return;
         }
 
-        // Save this partial data temporarily, e.g., in sessionStorage
-        sessionStorage.setItem("partialJobData", JSON.stringify(job));
+        try {
+          // 1. Add basic job info
+          const basicRes = await fetch("/api/jobs", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title: job.title,
+              company: job.company,
+              location: job.location,
+              skills: job.skills,
+            }),
+          });
 
-        // Redirect to the next page
-        window.location.href = "job_details.html";
+          const basicData = await basicRes.json();
+
+          if (!basicRes.ok) {
+            throw new Error(basicData.error || "Failed to add job.");
+          }
+
+          // 2. Add detailed job info
+          const detailsRes = await fetch("/api/jobs/details", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              job_id: basicData.id,
+              description: job.description,
+              salary_range: job.salary_range,
+              employment_type: job.employment_type,
+              experience_level: job.experience_level,
+              requirements: job.requirements,
+              benefits: job.benefits,
+              application_deadline: job.application_deadline,
+            }),
+          });
+
+          const detailsData = await detailsRes.json();
+
+          if (!detailsRes.ok) {
+            throw new Error(detailsData.error || "Failed to save job details.");
+          }
+
+          message.textContent = "✅ Job posted successfully!";
+          message.className = "form-message success";
+          jobForm.reset();
+        } catch (err) {
+          message.textContent = `❌ ${err.message}`;
+          message.className = "form-message error";
+        }
       });
     </script>
   </body>
