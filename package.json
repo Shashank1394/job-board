@@ -14,5 +14,13 @@
   "dependencies": {
     "express": "^5.1.0",
     "pg": "^8.16.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shashank1394/job-board.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shashank1394/job-board/issues"
+  },
+  "homepage": "https://github.com/Shashank1394/job-board#readme"
 }
