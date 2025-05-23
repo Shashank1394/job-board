@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job Board</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="job-board" class="container">
+      <header class="header">
+        <h1>💼 Job Board</h1>
+        <div class="filters">
+          <input type="text" id="titleFilter" placeholder="Job title..." />
+          <input
+            type="text"
+            id="skillFilter"
+            placeholder="Skill (e.g. React, .NET)..."
+          />
+          <input type="text" id="locationFilter" placeholder="Location..." />
+          <div class="button-group">
+            <button id="searchBtn">🔍 Search</button>
+            <button id="clearBtn">❌ Clear</button>
+          </div>
+        </div>
+      </header>
+
+      <main id="job-list" class="job-listings" aria-live="polite">
+        <!-- Dynamic job cards go here -->
+      </main>
+    </div>
+
+    <!-- ✅ Modal for job details -->
+    <div id="job-modal" class="modal hidden">
+      <div class="modal-content">
+        <span id="closeModal" class="close-button">&times;</span>
+        <div id="modal-body">
+          <h2 id="modal-title">Job Title</h2>
+          <p><strong>Company:</strong> <span id="modal-company"></span></p>
+          <p><strong>Location:</strong> <span id="modal-location"></span></p>
+          <p><strong>Skills:</strong> <span id="modal-skills"></span></p>
+          <hr />
+          <p><strong>Description:</strong></p>
+          <p id="modal-description"></p>
+
+          <p><strong>Salary Range:</strong> <span id="modal-salary"></span></p>
+          <p>
+            <strong>Employment Type:</strong>
+            <span id="modal-employment"></span>
+          </p>
+          <p>
+            <strong>Experience Level:</strong>
+            <span id="modal-experience"></span>
+          </p>
+
+          <p><strong>Requirements:</strong></p>
+          <ul id="modal-requirements">
+            <!-- List items will be populated here -->
+          </ul>
+
+          <p><strong>Benefits:</strong></p>
+          <ul id="modal-benefits">
+            <!-- List items will be populated here -->
+          </ul>
+
+          <p>
+            <strong>Application Deadline:</strong>
+            <span id="modal-deadline"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel - Add Job</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="admin-panel" class="admin-container">
+      <h1>➕ Add a New Job - Step 1</h1>
+
+      <form id="jobForm" class="job-form">
+        <div class="form-group">
+          <label for="title">Job Title</label>
+          <input type="text" id="title" required />
+        </div>
+
+        <div class="form-group">
+          <label for="company">Company Name</label>
+          <input type="text" id="company" required />
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" required />
+        </div>
+
+        <div class="form-group">
+          <label for="skills">Skills (comma separated)</label>
+          <input type="text" id="skills" required />
+        </div>
+
+        <!-- Instead of submit, we use a button for next step -->
+        <button type="button" id="nextBtn" class="btn-primary">Next ➡️</button>
+      </form>
+
+      <a class="back-link" href="index.html">← Back to Job Board</a>
+      <p id="message" class="form-message"></p>
+    </div>
+
+    <script>
+      const nextBtn = document.getElementById("nextBtn");
+      const message = document.getElementById("message");
+
+      nextBtn.addEventListener("click", () => {
+        // Collect data
+        const job = {
+          title: document.getElementById("title").value.trim(),
+          company: document.getElementById("company").value.trim(),
+          location: document.getElementById("location").value.trim(),
+          skills: document
+            .getElementById("skills")
+            .value.split(",")
+            .map((s) => s.trim())
+            .filter((s) => s.length > 0),
+        };
+
+        // Basic validation
+        if (
+          !job.title ||
+          !job.company ||
+          !job.location ||
+          job.skills.length === 0
+        ) {
+          message.textContent = "❌ Please fill all required fields.";
+          message.className = "form-message error";
+          return;
+        }
+
+        // Save this partial data temporarily, e.g., in sessionStorage
+        sessionStorage.setItem("partialJobData", JSON.stringify(job));
+
+        // Redirect to the next page
+        window.location.href = "job_details.html";
+      });
+    </script>
+  </body>
+</html>
